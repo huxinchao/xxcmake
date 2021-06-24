@@ -1,0 +1,19 @@
+    1. cmake_minimum_required(VERSION 2.8)  ///检查cmake的版本，至少为2.8
+    2. PROJECT(helloworld)    ///工程名为helloworld
+
+        # 通过在主工程文件CMakeLists.txt中修改ADD_SUBDIRECTORY (lib) 指令来指定一个编译输出位置;
+
+        # 指定本工程中静态库libhello.so生成的位置，即 build/lib;
+
+        ADD_SUBDIRECTORY(lib)
+
+
+    3. aux_source_directory(.  SRC_LIST) ///查找当前目录下所有的源文件并保存到SRC_LIST变量中
+    4.INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include   ${PROJECT_SOURCE_DIR}/abc)  ///将根目录下的include和abc加入包含目录列表
+    5. LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib)  ///将 ./lib加入编译器链接阶段的搜索目录列表
+    6. add_executable(hello  $(SRC_LIST})  ///使用SRC_LIST源文件列表里的文件生成一个可执行文件hello
+    如：add_executable(hello main.cpp base.cpp base.h)  
+    7. add_library(hello STATIC ${SRC_LIST})   使用SRC_LIST源文件列表里的文件生成一个静态链接libhello.a
+    ADD_LIBRARY (base STATIC ${SRC_LIST})
+    8. add_library(hello SHARD ${SRC_LIST})   使用SRC_LIST源文件列表里的文件生成一个动态链接库libhello.so
+    9. target_link_libraries(hello a b.a c.so) /// 将若干库文件链接到目标hello中，target_link_libraries里的库文件的顺序符合gcc/g++链接顺序的规则，即被依赖的库放在依赖它的库的后面，如果顺序有错，链接时会报错。
